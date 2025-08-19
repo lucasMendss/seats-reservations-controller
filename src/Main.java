@@ -1,36 +1,27 @@
-import java.util.Scanner;
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         SeatMap seatMap = new SeatMap();
-        //------------------------------------xx
-        int chosenRowIntIndex = 0, chosenSeatIntIndex = 0;
-        char chosenSessionChar = '-';
-        String chosenSessionText = "", chosenRowStringIndex, clientName;
-        //------------------------------------xx
 
         //Receiving quantity of rows
-        System.out.println("Digite quantas FILEIRAS terá a sala do teatro (máx: 26):");
+        System.out.println("Digite quantas FILEIRAS terá a sala do teatro (min: 2 | máx: 26):");
         seatMap.setRowsQuantity(Validations.validateRowsQuantityInput());
         System.out.println(seatMap.getRowsQuantity());
 
         //Creating an array of alphabetical indices of rows whose length is rowsQuantity
-        String[] rowsStringIndices = new String[seatMap.getRowsQuantity()];
+        seatMap.setRowsStringIndices(seatMap.getRowsQuantity());
         for (int ii = 0; ii < seatMap.getRowsQuantity(); ii++) {
-            rowsStringIndices[ii] = String.valueOf((char) ('A' + ii));
+            System.out.println(seatMap.getRowsStringIndices()[ii]);
         }
 
         //Receiving quantity of seats per row
-        System.out.println("Digite quantas CADEIRAS terá cada fileira:");
+        System.out.println("Digite quantas CADEIRAS terá cada fileira (min: 2):");
         seatMap.setSeatsPerRow(Validations.validateSeatsPerRowInput());
         System.out.printf("Fileiras: %s \n Cadeiras por fileira: %s \n", seatMap.getRowsQuantity(), seatMap.getSeatsPerRow());
 
-        String morningSession[][] = new String[seatMap.getRowsQuantity()][seatMap.getSeatsPerRow()];
-        String afternoonSession[][] = new String[seatMap.getRowsQuantity()][seatMap.getSeatsPerRow()];
-        String nightSession[][] = new String[seatMap.getRowsQuantity()][seatMap.getSeatsPerRow()];
-
+        //Creating a reservation names array for each session
+        seatMap.setMorningSession(seatMap.getRowsQuantity(), seatMap.getSeatsPerRow());
+        seatMap.setAfternoonSession(seatMap.getRowsQuantity(), seatMap.getSeatsPerRow());
+        seatMap.setNightSession(seatMap.getRowsQuantity(), seatMap.getSeatsPerRow());
 
         int option;
         do {
@@ -38,56 +29,59 @@ public class Main {
             option = Validations.validateMenuOptionInput();
             switch (option){
                 case 1:
-                    if(seatMap.getRowsQuantity() > 1){
-                        System.out.printf("Digite a letra da fileira: (%s a %s) \n", "A", rowsStringIndices[seatMap.getRowsQuantity()-1]);
-                        chosenRowStringIndex = Validations.validateChosenRowInput(rowsStringIndices[seatMap.getRowsQuantity()-1]);
-                        System.out.printf("FIleira escolhida: %s ----------------------- \n", chosenRowStringIndex);
-                        //Finding the index of the chosen row letter
-                        for (int ii = 0; ii < rowsStringIndices.length; ii++){
-                            if (rowsStringIndices[ii].equals(chosenRowStringIndex)){
-                                chosenRowIntIndex = ii;
-                                break;
-                            }
+                    Reservation reservation = new Reservation();
+
+                    System.out.printf("Digite a letra da fileira: (%s a %s) \n", "A", seatMap.getRowsStringIndices()[seatMap.getRowsQuantity()-1]);
+                    reservation.setChosenRowStringIndex(Validations.validateChosenRowInput(seatMap.getRowsStringIndices()[seatMap.getRowsQuantity()-1]));
+                    System.out.printf("FIleira escolhida: %s ----------------------- \n", reservation.getChosenRowStringIndex());
+                    //Finding the index of the chosen row letter
+                    for (int ii = 0; ii < seatMap.getRowsStringIndices().length; ii++){
+                        if (seatMap.getRowsStringIndices()[ii].equals(reservation.getChosenRowStringIndex())){
+                            reservation.setChosenRowIntIndex(ii);
+                            break;
                         }
                     }
-                    else {
-                        chosenRowStringIndex = rowsStringIndices[1];
-                    }
-                    if(seatMap.getSeatsPerRow() > 1){
-                        System.out.printf("Digite nº da cadeira: (%s a %s) \n", 1, seatMap.getSeatsPerRow());
-                        chosenSeatIntIndex = Validations.validateChosenSeatInput(seatMap.getSeatsPerRow());
-                    }
-                    else {
-                        chosenSeatIntIndex = 1;
-                    }
+
+                    System.out.printf("Digite nº da cadeira: (%s a %s) \n", 1, seatMap.getSeatsPerRow());
+                    //chosenSeatIntIndex = Validations.validateChosenSeatInput(seatMap.getSeatsPerRow());
+                    reservation.setChosenSeatIntIndex(Validations.validateChosenSeatInput(seatMap.getSeatsPerRow()));
+
                     System.out.println("A reserva é para a sessão da MANHÃ, TARDE ou NOITE? \n Digite m, t ou n :");
-                    chosenSessionChar = Validations.validateChosenSessionInput();
+                    //chosenSessionFirstLetter = Validations.validateChosenSessionInput();
+                    reservation.setChosenSessionFirstLetter(Validations.validateChosenSessionFirstLetterInput());
 
                     System.out.println("Digite o nome de quem reserva:");
-                    clientName = scanner.nextLine();
+                    //clientName = scanner.nextLine();
+                    reservation.setClientName(Validations.validateClientNameInput());
 
-                    if (chosenSessionChar == 'M'){
-                        chosenSessionText = "Manhã";
-                        morningSession[chosenRowIntIndex][chosenSeatIntIndex-1] = clientName;
+                    if (reservation.getChosenSessionFirstLetter() == 'M'){
+                        reservation.setChosenSession("Manhã");
+                        seatMap.getMorningSession()[reservation.getChosenRowIntIndex()][reservation.getChosenSeatIntIndex()-1] = reservation.getClientName();
                     }
-                    if (chosenSessionChar == 'T'){
-                        chosenSessionText = "Tarde";
-                        afternoonSession[chosenRowIntIndex][chosenSeatIntIndex-1] = clientName;
+                    if (reservation.getChosenSessionFirstLetter() == 'T'){
+                        reservation.setChosenSession("Tarde");
+                        seatMap.getAfternoonSession()[reservation.getChosenRowIntIndex()][reservation.getChosenSeatIntIndex()-1] = reservation.getClientName();
                     }
-                    if (chosenSessionChar == 'N'){
-                        chosenSessionText = "Noite";
-                        nightSession[chosenRowIntIndex][chosenSeatIntIndex-1] = clientName;
+                    if (reservation.getChosenSessionFirstLetter() == 'N'){
+                        reservation.setChosenSession("Noite");
+                        seatMap.getNightSession()[reservation.getChosenRowIntIndex()][reservation.getChosenSeatIntIndex()-1] = reservation.getClientName();
                     }
                     System.out.printf("----> '%s' Reservou o lugar %s%s para a " +
-                            "sessão da %s \n", clientName, chosenRowStringIndex, chosenSeatIntIndex, chosenSessionText);
+                            "sessão da %s \n", reservation.getClientName(), reservation.getChosenRowStringIndex(), reservation.getChosenSeatIntIndex(), reservation.getChosenSession());
+                    System.out.println(reservation.getChosenRowIntIndex());
+                    System.out.println(reservation.getChosenSeatIntIndex());
+                    System.out.println(seatMap.getMorningSession()[reservation.getChosenRowIntIndex()][reservation.getChosenSeatIntIndex()-1]);
+                    //System.out.println(seatMap.getMorningSession()[0][0]);
+                    //System.out.println(seatMap.getAfternoonSession()[0][0]);
+                    //System.out.println(seatMap.getNightSession()[0][0]);
                     break;
+
                 case 2:
-                    System.out.println(chosenRowIntIndex);
-                    System.out.println(chosenSeatIntIndex);
-                    SeatMap.printReservationsMap("MANHÃ", rowsStringIndices, seatMap.getSeatsPerRow());
-                    SeatMap.printReservationsMap("TARDE", rowsStringIndices, seatMap.getSeatsPerRow());
-                    SeatMap.printReservationsMap("NOITE", rowsStringIndices, seatMap.getSeatsPerRow());
+                    SeatMap.printReservationsMap("MANHÃ", seatMap.getRowsStringIndices(), seatMap.getSeatsPerRow());
+                    SeatMap.printReservationsMap("TARDE", seatMap.getRowsStringIndices(), seatMap.getSeatsPerRow());
+                    SeatMap.printReservationsMap("NOITE", seatMap.getRowsStringIndices(), seatMap.getSeatsPerRow());
                     break;
+
                 case 3:
                     System.out.println("Fim");
             }

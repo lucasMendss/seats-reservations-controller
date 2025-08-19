@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Validations {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
     private static boolean inputIsValid;
 
     public static int validateRowsQuantityInput() {
@@ -16,7 +16,7 @@ public class Validations {
                     inputIsValid = true;
                     return output;
                 } else {
-                    System.out.println("Valor inválido (1 a 26).");
+                    System.out.println("Valor inválido (min: 2 | máx: 26).");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Valor inválido. Digite um número inteiro.");
@@ -37,7 +37,7 @@ public class Validations {
                     inputIsValid = true;
                     return output;
                 } else {
-                    System.out.println("Valor inválido. Digite um número maior que 1).");
+                    System.out.println("Valor inválido. (min: 2).");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Valor inválido. Digite um número inteiro.");
@@ -115,7 +115,7 @@ public class Validations {
         return output;
     }
 
-    public static char validateChosenSessionInput() {
+    public static char validateChosenSessionFirstLetterInput() {
         inputIsValid = false;
         char output = '-';
 
@@ -135,6 +135,32 @@ public class Validations {
                 }
             }
             System.out.println("Não é uma letra válida. Digite novamente.\n");
+        }
+        return output;
+    }
+
+    public static String validateClientNameInput(){
+        inputIsValid = false;
+        int clientNameMinLength = 3;
+        int clientNameMaxLength = 20;
+        String output = "";
+
+        while(!inputIsValid){
+            String input = scanner.nextLine().toUpperCase();
+            if (!input.matches("[A-Za-zÀ-ÿ ]+")) {
+                System.out.println("O nome deve conter apenas letras e espaços. Digite novamente.\n");
+            }
+            else if (input.length() < clientNameMinLength) {
+                System.out.println("Nome muito curto. Digite novamente.\n");
+            }
+            else if (input.length() > clientNameMaxLength) {
+                System.out.println("Nome muito longo. Digite novamente.\n");
+            }
+            else {
+                inputIsValid = true;
+                output = input;
+                return output;
+            }
         }
         return output;
     }
