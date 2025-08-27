@@ -56,22 +56,31 @@ public class SeatMap {
         this.nightSession =  new String[rowsQuantity][seatsPerRow];
     }
 
-    public static void printReservationsMap(String sessionText, String[] rowsLetterIndices, int seatsPerRow){
+    public void printReservationsMap(String chosenSession, String[][] sessionArray){
         System.out.println(" ");
-        System.out.printf("%s:---------------------------\n", sessionText);
+        System.out.printf("%s:---------------------------\n", chosenSession);
         System.out.print(" - ");
-        for (int ii = 0; ii < rowsLetterIndices.length; ii++) {
-            System.out.print(" - " + rowsLetterIndices[ii] + " - "); // print rows letters horizontally
+        for (int ii = 0; ii < rowsStringIndices.length; ii++) {
+            System.out.print(" - " + rowsStringIndices[ii] + " - "); // print rows letters horizontally
         }
         System.out.println(" ");
-        for (int ii = 1; ii <= seatsPerRow; ii++) {
-            System.out.print(ii); // print seats numbers vertically
-            for (int jj = 0; jj < rowsLetterIndices.length; jj++) {
-                if (jj == 0) {
-                    System.out.print("   |___| "); // print seat representation
-                } else {
-                    System.out.print(" |___| "); // print seat representation
-                }
+        for (int ii = 0; ii < seatsPerRow; ii++) {
+            System.out.print(ii+1); // print seats numbers vertically
+            for (int jj = 0; jj < rowsStringIndices.length; jj++) {
+                    if (sessionArray[jj][ii] == null){
+                        if (jj == 0) {
+                            System.out.print("   |___| "); // print empty seat representation
+                        } else {
+                            System.out.print(" |___| "); // print empty seat representation
+                        }
+                    }
+                    else {
+                        if (jj == 0) {
+                            System.out.print("   |-X-| "); // print occupied seat representation
+                        } else {
+                            System.out.print(" |-X-| "); // print occupied seat representation
+                        }
+                    }
             }
             System.out.println(" ");
         }
