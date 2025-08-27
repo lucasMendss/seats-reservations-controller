@@ -6,7 +6,6 @@ public class OptionsMenu {
             // Handle the InterruptedException, which can occur if another thread interrupts the current thread while it's sleeping.
             e.printStackTrace();
         }
-        System.out.println(" ");
         System.out.println("----------------------------------------");
         System.out.println("Escolha e digite:");
         System.out.println("- 1: Reservar lugar;");

@@ -56,7 +56,7 @@ public class SeatMap {
         this.nightSession =  new String[rowsQuantity][seatsPerRow];
     }
 
-    public void printReservationsMap(String chosenSession, String[][] sessionArray){
+    public void printReservationsMap(String chosenSession, String[][] chosenSessionArray){
         System.out.println(" ");
         System.out.printf("%s:---------------------------\n", chosenSession);
         System.out.print(" - ");
@@ -67,7 +67,7 @@ public class SeatMap {
         for (int ii = 0; ii < seatsPerRow; ii++) {
             System.out.print(ii+1); // print seats numbers vertically
             for (int jj = 0; jj < rowsStringIndices.length; jj++) {
-                    if (sessionArray[jj][ii] == null){
+                    if (chosenSessionArray[jj][ii] == null){
                         if (jj == 0) {
                             System.out.print("   |___| "); // print empty seat representation
                         } else {

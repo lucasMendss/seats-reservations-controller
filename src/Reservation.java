@@ -3,6 +3,18 @@ public class Reservation {
     private char chosenSessionFirstLetter;
     private String chosenSession, chosenRowStringIndex, clientName;
 
+    public boolean chosenSeatIsEmpty(String[][] chosenSessionArray, int chosenRowIntIndex, int chosenSeatIntIndex){
+        if(chosenSessionArray[chosenRowIntIndex][chosenSeatIntIndex-1] == null){
+            System.out.printf("----> '%s' Reservou o assento %s%s para a " +
+                    "sessão da %s \n", getClientName(), getChosenRowStringIndex(), getChosenSeatIntIndex(), getChosenSession());
+                    return true;
+        }
+        else{
+            System.out.printf("O assento %s%s já está ocupado! Escolha outro.\n\n", getChosenRowStringIndex(), getChosenSeatIntIndex());
+            return false;
+        }
+    }
+
     public String getClientName() {
         return clientName;
     }
